@@ -7,5 +7,6 @@ namespace CryptocurrencyStatistics.Application.Interfaces
     public interface IYobitApiClient
     {
         public Task<EthUsdResponseDto> GetEthUsdUpdate(CancellationToken cancellationToken);
+        public Task<BtcUsdResponseDto> GetBtcUsdUpdate(CancellationToken cancellationToken);
     }
 }

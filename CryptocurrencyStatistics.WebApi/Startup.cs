@@ -41,6 +41,7 @@ namespace CryptocurrencyStatistics.WebApi
             var yobitSettings = new YobitClientSettings()
             {
                 EthUsdUri = Configuration["YobitEndpoints:EthUsd:Uri"],
+                BtcUsdUri = Configuration["YobitEndpoints:BtcUsd:Uri"],
             };
             services.AddYobitApiService(yobitSettings);
             services.AddHostedService<StatisticsHttpDownloadService>();

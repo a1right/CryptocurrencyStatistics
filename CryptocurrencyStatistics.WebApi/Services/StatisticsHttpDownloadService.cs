@@ -38,14 +38,21 @@ namespace CryptocurrencyStatistics.WebApi.Services
                 {
                     var recordsService = scope.ServiceProvider.GetRequiredService<IRecordsService>();
                     var ethUsdUpdateDto = await _yobitApiClient.GetEthUsdUpdate(cancellationToken);
-                    var record = new Record()
+                    var ethUsdRecord = new Record()
                     {
                         PairName = _configuration["YobitEndpoints:EthUsd:Name"],
                         CreatedDateTime = ethUsdUpdateDto.eth_usd.updated.ToUniversalDateTime(),
                         Value = ethUsdUpdateDto.eth_usd.last,
                     };
-                    
-                    await recordsService.CreateRecord(record, cancellationToken);
+                    var btcUsdUpdateDto = await _yobitApiClient.GetBtcUsdUpdate(cancellationToken);
+                    var btcUsdRecord = new Record()
+                    {
+                        PairName = _configuration["YobitEndpoints:BtcUsd:Name"],
+                        CreatedDateTime = btcUsdUpdateDto.btc_usd.updated.ToUniversalDateTime(),
+                        Value = (decimal)btcUsdUpdateDto.btc_usd.last,
+                    };
+                    await recordsService.CreateRecord(ethUsdRecord, cancellationToken);
+                    await recordsService.CreateRecord(btcUsdRecord, cancellationToken);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(updateInterval));
             }
