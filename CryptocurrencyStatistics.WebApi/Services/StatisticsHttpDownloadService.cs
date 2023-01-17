@@ -6,6 +6,7 @@ using AutoMapper;
 using CryptocurrencyStatistics.Application.Interfaces;
 using CryptocurrencyStatistics.Domain;
 using CryptocurrencyStatistics.WebApi.Dtos;
+using CryptocurrencyStatistics.WebApi.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,8 +39,13 @@ namespace CryptocurrencyStatistics.WebApi.Services
                 {
                     var recordsService = scope.ServiceProvider.GetRequiredService<IRecordsService>();
                     var ethUsdUpdateDto = await _yobitApiClient.GetEthUsdUpdate(cancellationToken);
-                    var record = _mapper.Map<Record>(ethUsdUpdateDto);
-                    record.PairName = _configuration["YobitEndpoints:EthUsd:Name"];
+                    var record = new Record()
+                    {
+                        PairName = _configuration["YobitEndpoints:EthUsd:Name"],
+                        CreatedDateTime = ethUsdUpdateDto.eth_usd.updated.ToDateTime().ToUniversalTime(),
+                        Value = ethUsdUpdateDto.eth_usd.last,
+                    };
+                    
                     await recordsService.CreateRecord(record, cancellationToken);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(2));

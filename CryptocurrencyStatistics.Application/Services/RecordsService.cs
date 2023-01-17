@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CryptocurrencyStatistics.Application.Interfaces;
@@ -19,23 +17,22 @@ namespace CryptocurrencyStatistics.Application.Services
             _context = context;
         }
 
-        public async Task<Record> GetLastRecord(int dateTimeOffset,CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Record> GetLastRecord(string pairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (cancellationToken.IsCancellationRequested)
                 return null;
-            var record = await _context.Records.OrderBy(x => x.CreatedDateTime)
+            var record = await _context.Records.Where(x => x.PairName == pairName)
+                                               .OrderBy(x => x.CreatedDateTime)
                                                .LastOrDefaultAsync(cancellationToken);
-            record.CreatedDateTime += TimeSpan.FromHours(dateTimeOffset);
             return record;
         }
-        public async Task<Record> GeTRecordAtDate(DateTime requestedTime, int dateTimeOffset,CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Record> GeTRecordAtDate(string pairName ,DateTime requestedTime,CancellationToken cancellationToken = default(CancellationToken))
         {
             if (cancellationToken.IsCancellationRequested)
                 return null;
-            var record = await _context.Records.Where(x => x.CreatedDateTime >= requestedTime.ToUniversalTime())
+            var record = await _context.Records.Where(x => x.CreatedDateTime >= requestedTime.ToUniversalTime() && x.PairName == pairName)
                                                .OrderBy(x => x.CreatedDateTime)
                                                .FirstOrDefaultAsync(cancellationToken);
-            record.CreatedDateTime += TimeSpan.FromHours(dateTimeOffset);
             return record;
         }
 

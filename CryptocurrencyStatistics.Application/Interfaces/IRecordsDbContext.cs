@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using CryptocurrencyStatistics.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
 
 namespace CryptocurrencyStatistics.Application.Interfaces
 {

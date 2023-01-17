@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CryptocurrencyStatistics.Application.Dtos;
 using CryptocurrencyStatistics.Domain;
 using CryptocurrencyStatistics.WebApi.Dtos;
@@ -13,8 +14,9 @@ namespace CryptocurrencyStatistics.WebApi.Mappings
             CreateMap<RecordCreateDto, Record>();
             CreateMap<EthUsdResponseDto, Record>()
                 .ForMember(dest => dest.Value,
-                    options => options.MapFrom(source =>
-                        source.eth_usd.last));
+                    options => options
+                        .MapFrom(source => source.eth_usd.last));
+
         }
     }
 }

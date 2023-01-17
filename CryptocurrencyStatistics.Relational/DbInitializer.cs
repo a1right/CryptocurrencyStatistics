@@ -8,11 +8,11 @@ namespace CryptocurrencyStatistics.RelationalStorage
     {
         public static void Initialize(RecordsDbContext context, bool isProduction)
         {
-            if (!isProduction)
+            if (isProduction)
             {
-                SeedData(context);
+                ApplyMigrations(context);
             }
-            ApplyMigrations(context);
+            SeedData(context);
         }
 
         private static void ApplyMigrations(RecordsDbContext context)
