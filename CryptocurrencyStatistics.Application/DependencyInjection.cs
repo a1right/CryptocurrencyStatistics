@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using CryptocurrencyStatistics.Application.Interfaces;
 using CryptocurrencyStatistics.Application.Services;
@@ -12,6 +14,13 @@ namespace CryptocurrencyStatistics.Application
         public static IServiceCollection AddRecordsService(this IServiceCollection services)
         {
             services.AddScoped<IRecordsService, RecordsService>();
+            return services;
+        }
+
+        public static IServiceCollection AddYobitApiService(this IServiceCollection services,
+            YobitClientSettings settings)
+        {
+            services.AddSingleton<IYobitApiClient>(provider => new YobitApiClient(provider.GetService<IHttpClientFactory>(), settings));
             return services;
         }
     }

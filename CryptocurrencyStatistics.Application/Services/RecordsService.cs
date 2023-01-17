@@ -43,6 +43,7 @@ namespace CryptocurrencyStatistics.Application.Services
         {
             _context.Records.Add(record);
             await _context.SaveChangesAsync(cancellationToken);
+            Console.WriteLine($"--> New record recieved: Id: {record.Id}, PairName: {record.PairName}, Created datetime: {record.CreatedDateTime}, Value: {record.Value}");
         }
     }
 }

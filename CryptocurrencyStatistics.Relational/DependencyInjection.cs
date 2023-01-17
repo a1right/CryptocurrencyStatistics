@@ -20,6 +20,7 @@ namespace CryptocurrencyStatistics.Relational
         {
             services.AddDbContext<RecordsDbContext>(options =>
                 options.UseInMemoryDatabase("InMemoryDb(Testing environment)"));
+            services.AddScoped<IRecordsDbContext, RecordsDbContext>();
             return services;
         }
     }

@@ -1,7 +1,10 @@
-﻿namespace CryptocurrencyStatistics.WebApi.Models
-{
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-    public class EthUsdResponseTemplate
+namespace CryptocurrencyStatistics.Application.Dtos
+{
+    public class EthUsdResponseDto
     {
         public Eth_Usd eth_usd { get; set; }
     }
@@ -18,5 +21,4 @@
         public float sell { get; set; }
         public int updated { get; set; }
     }
-
 }
