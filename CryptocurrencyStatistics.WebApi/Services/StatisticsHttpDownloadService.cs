@@ -20,12 +20,10 @@ namespace CryptocurrencyStatistics.WebApi.Services
         private readonly IMapper _mapper;
         private readonly IServiceProvider _serviceProvider;
 
-        public StatisticsHttpDownloadService(IYobitApiClient yobitApiClient, IConfiguration configuration, 
-            IMapper mapper, IServiceProvider serviceProvider)
+        public StatisticsHttpDownloadService(IYobitApiClient yobitApiClient, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _yobitApiClient = yobitApiClient;
             _configuration = configuration;
-            _mapper = mapper;
             _serviceProvider = serviceProvider;
         }
 
@@ -33,6 +31,7 @@ namespace CryptocurrencyStatistics.WebApi.Services
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("--> Background task started");
+            var updateInterval = int.Parse(_configuration["YobitUpdateInterval"]);
             while (!cancellationToken.IsCancellationRequested)
             {
                 using (var scope = _serviceProvider.CreateScope())
@@ -42,13 +41,13 @@ namespace CryptocurrencyStatistics.WebApi.Services
                     var record = new Record()
                     {
                         PairName = _configuration["YobitEndpoints:EthUsd:Name"],
-                        CreatedDateTime = ethUsdUpdateDto.eth_usd.updated.ToDateTime().ToUniversalTime(),
+                        CreatedDateTime = ethUsdUpdateDto.eth_usd.updated.ToUniversalDateTime(),
                         Value = ethUsdUpdateDto.eth_usd.last,
                     };
                     
                     await recordsService.CreateRecord(record, cancellationToken);
                 }
-                await Task.Delay(TimeSpan.FromSeconds(2));
+                await Task.Delay(TimeSpan.FromSeconds(updateInterval));
             }
         }
     }

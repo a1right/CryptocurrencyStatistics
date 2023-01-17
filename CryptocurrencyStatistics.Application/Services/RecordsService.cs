@@ -26,7 +26,7 @@ namespace CryptocurrencyStatistics.Application.Services
                                                .LastOrDefaultAsync(cancellationToken);
             return record;
         }
-        public async Task<Record> GeTRecordAtDate(string pairName ,DateTime requestedTime,CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Record> GetRecordAtDate(string pairName ,DateTime requestedTime,CancellationToken cancellationToken = default(CancellationToken))
         {
             if (cancellationToken.IsCancellationRequested)
                 return null;

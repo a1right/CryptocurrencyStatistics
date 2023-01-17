@@ -9,7 +9,7 @@ namespace CryptocurrencyStatistics.Application.Interfaces
     {
         public Task<Record> GetLastRecord(string pairName, CancellationToken cancellationToken = default(CancellationToken));
 
-        public Task<Record> GeTRecordAtDate(string pairName, DateTime requestedTime, CancellationToken cancellationToken = default(CancellationToken));
+        public Task<Record> GetRecordAtDate(string pairName, DateTime requestedTime, CancellationToken cancellationToken = default(CancellationToken));
 
         public Task CreateRecord(Record record, CancellationToken cancellationToken = default(CancellationToken));
     }

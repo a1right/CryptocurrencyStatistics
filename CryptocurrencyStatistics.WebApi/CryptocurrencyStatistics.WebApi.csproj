@@ -20,9 +20,5 @@
     <ProjectReference Include="..\CryptocurrencyStatistics.Relational\CryptocurrencyStatistics.RelationalStorage.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 
 </Project>
