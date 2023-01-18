@@ -1,7 +1,5 @@
 using System;
-using System.Net.Http;
 using CryptocurrencyStatistics.Application;
-using CryptocurrencyStatistics.Application.Interfaces;
 using CryptocurrencyStatistics.Application.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;

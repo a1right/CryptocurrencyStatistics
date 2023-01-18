@@ -20,6 +20,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         private readonly IConfiguration _configuration;
         private string _ethUsdPairName;
         private string _btcUsdPairName;
+        private string _trxUsdtPairName;
 
         public RecordsController(IRecordsService recordsService, IMapper mapper, IConfiguration configuration)
         {
@@ -28,6 +29,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
             _configuration = configuration;
             _btcUsdPairName = _configuration["YobitEndpoints:BtcUsd:Name"];
             _ethUsdPairName = _configuration["YobitEndpoints:EthUsd:Name"];
+            _trxUsdtPairName = _configuration["YobitEndpoints:TrxUsdt:Name"];
         }
 
         #region EthUsd
@@ -95,6 +97,40 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
             await _recordsService.CreateRecord(record, cancellationToken);
             return Ok(record.Id);
         }
+
+        #endregion
+
+        #region TrxUsdt
+        [HttpGet("trx_usdt")]
+        public async Task<ActionResult<RecordReadDto>> GetLastTrxUsdtRecord(CancellationToken cancellationToken)
+        {
+            var record = await _recordsService.GetLastRecord(_trxUsdtPairName, cancellationToken);
+            if (record is null)
+                return NotFound();
+            var response = _mapper.Map<RecordReadDto>(record);
+            return Ok(response);
+        }
+        [HttpGet("trx_usdt/{dateRequest}")]
+        public async Task<ActionResult<RecordReadDto>> GetLastTrxUsdtRecord(int dateRequest, CancellationToken cancellationToken)
+        {
+            var date = dateRequest.ToUniversalDateTime();
+            var record = await _recordsService.GetRecordAtDate(_trxUsdtPairName, date, cancellationToken);
+            if (record is null)
+                return NotFound();
+            var response = _mapper.Map<RecordReadDto>(record);
+            return Ok(response);
+        }
+
+        [HttpPost("trx_usdt")]
+        public async Task<ActionResult> CreateTrxUsdtRecord([FromBody] RecordCreateDto createDto, CancellationToken cancellationToken)
+        {
+            var record = _mapper.Map<Record>(createDto);
+            record.CreatedDateTime = createDto.CreatedDateTime.ToUniversalDateTime();
+            record.PairName = _trxUsdtPairName;
+            await _recordsService.CreateRecord(record, cancellationToken);
+            return Ok(record.Id);
+        }
+
 
         #endregion
     }

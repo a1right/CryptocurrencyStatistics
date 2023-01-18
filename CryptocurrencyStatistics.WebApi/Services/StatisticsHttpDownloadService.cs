@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using CryptocurrencyStatistics.Application.Interfaces;
 using CryptocurrencyStatistics.Domain;
-using CryptocurrencyStatistics.WebApi.Dtos;
 using CryptocurrencyStatistics.WebApi.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
