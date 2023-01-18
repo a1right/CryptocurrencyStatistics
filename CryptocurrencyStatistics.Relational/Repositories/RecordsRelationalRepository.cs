@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,17 +8,31 @@ using CryptocurrencyStatistics.Domain;
 using CryptocurrencyStatistics.Relational;
 using CryptocurrencyStatistics.RelationalStorage.Models;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.TypeMapping;
 
 namespace CryptocurrencyStatistics.RelationalStorage.Repositories
 {
-    public class RecordsRepository : IRecordsRepository
+    public class RecordsRelationalRepository : IRecordsRelationalRepository
     {
         private readonly RecordsDbContext _context;
 
-        public RecordsRepository(RecordsDbContext context)
+        public RecordsRelationalRepository(RecordsDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<Record>> GetAll(CancellationToken cancellationToken)
+        {
+            if(cancellationToken.IsCancellationRequested) 
+                return null;
+            var statisticDatas = await _context.StatisticDatas.Include(x => x.Pair).ToListAsync(cancellationToken);
+            var records = statisticDatas.Select(x => new Record()
+            {
+                Id = x.Id,
+                PairName = x.Pair.Name,
+                CreatedDateTime = x.CreatedDateTime,
+                Value = x.Value,
+            }).ToList();
+            return records;
         }
         public async Task<Record> GetLastRecord(string pairName, CancellationToken cancellationToken)
         {

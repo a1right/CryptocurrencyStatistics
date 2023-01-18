@@ -9,13 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistense", "Persistense"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{5F59A6D0-94A7-4213-ADF6-64CCC9B6BC8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptocurrencyStatistics.WebApi", "CryptocurrencyStatistics.WebApi\CryptocurrencyStatistics.WebApi.csproj", "{545EC591-5877-4D53-902A-F50AC26AF2AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptocurrencyStatistics.WebApi", "CryptocurrencyStatistics.WebApi\CryptocurrencyStatistics.WebApi.csproj", "{545EC591-5877-4D53-902A-F50AC26AF2AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptocurrencyStatistics.RelationalStorage", "CryptocurrencyStatistics.Relational\CryptocurrencyStatistics.RelationalStorage.csproj", "{D2772502-6C53-41F6-97E0-6180A49D78E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptocurrencyStatistics.RelationalStorage", "CryptocurrencyStatistics.Relational\CryptocurrencyStatistics.RelationalStorage.csproj", "{D2772502-6C53-41F6-97E0-6180A49D78E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptocurrencyStatistics.Domain", "CryptocurrencyStatistics.Domain\CryptocurrencyStatistics.Domain.csproj", "{5BC49F91-4A40-4005-AE9E-0697D79AD97F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptocurrencyStatistics.Domain", "CryptocurrencyStatistics.Domain\CryptocurrencyStatistics.Domain.csproj", "{5BC49F91-4A40-4005-AE9E-0697D79AD97F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptocurrencyStatistics.Application", "CryptocurrencyStatistics.Application\CryptocurrencyStatistics.Application.csproj", "{6F850B63-BB3A-48E5-9A05-B30297A5F9C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptocurrencyStatistics.Application", "CryptocurrencyStatistics.Application\CryptocurrencyStatistics.Application.csproj", "{6F850B63-BB3A-48E5-9A05-B30297A5F9C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptocurrencyStatistics.DocumentOrientedStorage", "CryptocurrencyStatistics.DocumentOrientedStorage\CryptocurrencyStatistics.DocumentOrientedStorage.csproj", "{4F300282-1890-42BA-9CDA-9B1B5B1A74A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6F850B63-BB3A-48E5-9A05-B30297A5F9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F850B63-BB3A-48E5-9A05-B30297A5F9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F850B63-BB3A-48E5-9A05-B30297A5F9C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F300282-1890-42BA-9CDA-9B1B5B1A74A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F300282-1890-42BA-9CDA-9B1B5B1A74A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F300282-1890-42BA-9CDA-9B1B5B1A74A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F300282-1890-42BA-9CDA-9B1B5B1A74A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{D2772502-6C53-41F6-97E0-6180A49D78E8} = {77A9559B-51BA-475F-9231-0BE203461329}
 		{5BC49F91-4A40-4005-AE9E-0697D79AD97F} = {A768C3E3-55BE-4441-B2D0-E0C8F91DB62E}
 		{6F850B63-BB3A-48E5-9A05-B30297A5F9C5} = {A768C3E3-55BE-4441-B2D0-E0C8F91DB62E}
+		{4F300282-1890-42BA-9CDA-9B1B5B1A74A1} = {77A9559B-51BA-475F-9231-0BE203461329}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3277CC93-CD83-4FAD-9D68-DB647CA62876}

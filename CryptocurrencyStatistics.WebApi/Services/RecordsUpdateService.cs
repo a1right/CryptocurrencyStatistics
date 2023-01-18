@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using CryptocurrencyStatistics.Application.Interfaces;
+﻿using CryptocurrencyStatistics.Application.Interfaces;
 using CryptocurrencyStatistics.Domain;
 using CryptocurrencyStatistics.WebApi.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CryptocurrencyStatistics.WebApi.Services
 {
@@ -15,15 +15,17 @@ namespace CryptocurrencyStatistics.WebApi.Services
         private readonly IYobitApiClient _yobitApiClient;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IRecordsDocumentOrientedRepository _documentOrientedRepository;
 
-        public RecordsUpdateService(IYobitApiClient yobitApiClient, IConfiguration configuration, IServiceProvider serviceProvider)
+        public RecordsUpdateService(IYobitApiClient yobitApiClient, IConfiguration configuration, IServiceProvider serviceProvider, IRecordsDocumentOrientedRepository documentOrientedRepository)
         {
             _yobitApiClient = yobitApiClient;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _documentOrientedRepository = documentOrientedRepository;
         }
 
-        
+
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("--> Background task started");
@@ -32,22 +34,26 @@ namespace CryptocurrencyStatistics.WebApi.Services
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var recordsRepository = scope.ServiceProvider.GetRequiredService<IRecordsRepository>();
-                    await UpdateRecords(recordsRepository, cancellationToken);
+                    var recordsRepository = scope.ServiceProvider.GetRequiredService<IRecordsRelationalRepository>();
+                    await UpdateRecords(recordsRepository, _documentOrientedRepository, cancellationToken);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(updateInterval));
             }
         }
 
-        private async Task UpdateRecords(IRecordsRepository recordsRepository, CancellationToken cancellationToken)
+        private async Task UpdateRecords(IRecordsRelationalRepository recordsRelationalRepository, IRecordsDocumentOrientedRepository recordsDocumentOrientedRepository, CancellationToken cancellationToken)
         {
             var ethUsdRecord = await GetUpdatedEthUsdRecord(cancellationToken);
             var btcUsdRecord = await GetUpdatedBtcUsdRecord(cancellationToken);
             var trxUsdtRecord = await GetUpdatedTrxUsdtRecord(cancellationToken);
-            
-            await recordsRepository.CreateRecord(ethUsdRecord, cancellationToken);
-            await recordsRepository.CreateRecord(btcUsdRecord, cancellationToken);
-            await recordsRepository.CreateRecord(trxUsdtRecord, cancellationToken);
+
+            await recordsRelationalRepository.CreateRecord(ethUsdRecord, cancellationToken);
+            await recordsRelationalRepository.CreateRecord(btcUsdRecord, cancellationToken);
+            await recordsRelationalRepository.CreateRecord(trxUsdtRecord, cancellationToken);
+
+            await _documentOrientedRepository.Create(ethUsdRecord, cancellationToken);
+            await _documentOrientedRepository.Create(btcUsdRecord, cancellationToken);
+            await _documentOrientedRepository.Create(trxUsdtRecord, cancellationToken);
         }
 
         private async Task<Record> GetUpdatedEthUsdRecord(CancellationToken cancellationToken)

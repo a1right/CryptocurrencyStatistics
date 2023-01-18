@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using CryptocurrencyStatistics.Application.Interfaces;
-using CryptocurrencyStatistics.Domain;
-using CryptocurrencyStatistics.RelationalStorage.EntityConfigurations;
+﻿using CryptocurrencyStatistics.RelationalStorage.EntityConfigurations;
 using CryptocurrencyStatistics.RelationalStorage.Models;
 using Microsoft.EntityFrameworkCore;
 
