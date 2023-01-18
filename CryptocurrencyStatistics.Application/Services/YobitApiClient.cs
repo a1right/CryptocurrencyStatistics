@@ -52,11 +52,26 @@ namespace CryptocurrencyStatistics.Application.Services
                 await JsonSerializer.DeserializeAsync<BtcUsdResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
             return responseDto;
         }
+
+        public async Task<TrxUsdtResponseDto> GetTrxUsdtUpdate(CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested) return null;
+            var response = await _httpClient.GetAsync(_settings.TrxUsdtUri, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var responseDto =
+                await JsonSerializer.DeserializeAsync<TrxUsdtResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
+            return responseDto;
+        }
     }
 
     public class YobitClientSettings
     {
         public string EthUsdUri { get; set; }
         public string BtcUsdUri { get; set; }
+        public string TrxUsdtUri { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace CryptocurrencyStatistics.WebApi.Services
     {
         private readonly IYobitApiClient _yobitApiClient;
         private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
         private readonly IServiceProvider _serviceProvider;
 
         public StatisticsHttpDownloadService(IYobitApiClient yobitApiClient, IConfiguration configuration, IServiceProvider serviceProvider)
@@ -37,6 +36,7 @@ namespace CryptocurrencyStatistics.WebApi.Services
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var recordsService = scope.ServiceProvider.GetRequiredService<IRecordsService>();
+                    
                     var ethUsdUpdateDto = await _yobitApiClient.GetEthUsdUpdate(cancellationToken);
                     var ethUsdRecord = new Record()
                     {
@@ -44,6 +44,7 @@ namespace CryptocurrencyStatistics.WebApi.Services
                         CreatedDateTime = ethUsdUpdateDto.eth_usd.updated.ToUniversalDateTime(),
                         Value = ethUsdUpdateDto.eth_usd.last,
                     };
+                    
                     var btcUsdUpdateDto = await _yobitApiClient.GetBtcUsdUpdate(cancellationToken);
                     var btcUsdRecord = new Record()
                     {
@@ -51,8 +52,18 @@ namespace CryptocurrencyStatistics.WebApi.Services
                         CreatedDateTime = btcUsdUpdateDto.btc_usd.updated.ToUniversalDateTime(),
                         Value = (decimal)btcUsdUpdateDto.btc_usd.last,
                     };
+                    
+                    var trxUsdtUpdateDto = await _yobitApiClient.GetTrxUsdtUpdate(cancellationToken);
+                    var trxUsdtRecord = new Record()
+                    {
+                        PairName = _configuration["YobitEndpoints:TrxUsdt:Name"],
+                        CreatedDateTime = trxUsdtUpdateDto.trx_usdt.updated.ToUniversalDateTime(),
+                        Value = (decimal)trxUsdtUpdateDto.trx_usdt.last,
+                    };
+                    
                     await recordsService.CreateRecord(ethUsdRecord, cancellationToken);
                     await recordsService.CreateRecord(btcUsdRecord, cancellationToken);
+                    await recordsService.CreateRecord(trxUsdtRecord, cancellationToken);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(updateInterval));
             }
