@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using CryptocurrencyStatistics.Application.Interfaces;
+using CryptocurrencyStatistics.RelationalStorage.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,14 +14,18 @@ namespace CryptocurrencyStatistics.Relational
         {
             services.AddDbContext<RecordsDbContext>(options =>
                 options.UseNpgsql(connectionString));
-            services.AddScoped<IRecordsDbContext, RecordsDbContext>();
             return services;
         }
         public static IServiceCollection AddRecordsDbContextInMemory(this IServiceCollection services)
         {
             services.AddDbContext<RecordsDbContext>(options =>
                 options.UseInMemoryDatabase("InMemoryDb(Testing environment)"));
-            services.AddScoped<IRecordsDbContext, RecordsDbContext>();
+            return services;
+        }
+
+        public static IServiceCollection AddRecordsRepository(this IServiceCollection services)
+        {
+            services.AddScoped<IRecordsRepository, RecordsRepository>();
             return services;
         }
     }

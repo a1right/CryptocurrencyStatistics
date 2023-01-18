@@ -12,19 +12,20 @@ namespace CryptocurrencyStatistics.Application.Services
 
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly YobitClientSettings _settings;
+        private readonly YobitApiClientSettings _settings;
         private readonly HttpClient _httpClient;
 
 
-        public YobitApiClient(IHttpClientFactory httpClientFactory, YobitClientSettings settings)
+        public YobitApiClient(IHttpClientFactory httpClientFactory, YobitApiClientSettings settings)
         {
             _httpClientFactory = httpClientFactory;
             _settings = settings;
             _httpClient = _httpClientFactory.CreateClient();
         }
-        public async Task<EthUsdResponseDto> GetEthUsdUpdate(CancellationToken cancellationToken)
+        public async Task<EthUsdYobitResponseDto> GetEthUsdUpdate(CancellationToken cancellationToken)
         {
-            if(cancellationToken.IsCancellationRequested) return null;
+            if(cancellationToken.IsCancellationRequested) 
+                return null;
             var response = await _httpClient.GetAsync(_settings.EthUsdUri, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
@@ -32,13 +33,14 @@ namespace CryptocurrencyStatistics.Application.Services
             }
 
             var responseDto =
-               await JsonSerializer.DeserializeAsync<EthUsdResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
+               await JsonSerializer.DeserializeAsync<EthUsdYobitResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
             return responseDto;
         }
 
-        public async Task<BtcUsdResponseDto> GetBtcUsdUpdate(CancellationToken cancellationToken)
+        public async Task<BtcUsdYobitResponseDto> GetBtcUsdUpdate(CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested) return null;
+            if (cancellationToken.IsCancellationRequested) 
+                return null;
             var response = await _httpClient.GetAsync(_settings.BtcUsdUri, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
@@ -46,11 +48,11 @@ namespace CryptocurrencyStatistics.Application.Services
             }
 
             var responseDto =
-                await JsonSerializer.DeserializeAsync<BtcUsdResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
+                await JsonSerializer.DeserializeAsync<BtcUsdYobitResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
             return responseDto;
         }
 
-        public async Task<TrxUsdtResponseDto> GetTrxUsdtUpdate(CancellationToken cancellationToken)
+        public async Task<TrxUsdtYobitResponseDto> GetTrxUsdtUpdate(CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested) return null;
             var response = await _httpClient.GetAsync(_settings.TrxUsdtUri, cancellationToken);
@@ -60,12 +62,12 @@ namespace CryptocurrencyStatistics.Application.Services
             }
 
             var responseDto =
-                await JsonSerializer.DeserializeAsync<TrxUsdtResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
+                await JsonSerializer.DeserializeAsync<TrxUsdtYobitResponseDto>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
             return responseDto;
         }
     }
 
-    public class YobitClientSettings
+    public class YobitApiClientSettings
     {
         public string EthUsdUri { get; set; }
         public string BtcUsdUri { get; set; }

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using CryptocurrencyStatistics.Relational;
 using CryptocurrencyStatistics.RelationalStorage;
 using CryptocurrencyStatistics.WebApi.Services;
+using System.Reflection;
+using CryptocurrencyStatistics.Application.Interfaces;
 
 namespace CryptocurrencyStatistics.WebApi
 {
@@ -33,17 +35,17 @@ namespace CryptocurrencyStatistics.WebApi
                 Console.WriteLine("--> Using InMemoryDb");
             }
 
+            services.AddRecordsRepository();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddRecordsService();
             services.AddHttpClient();
-            var yobitSettings = new YobitClientSettings()
+            var yobitSettings = new YobitApiClientSettings()
             {
                 EthUsdUri = Configuration["YobitEndpoints:EthUsd:Uri"],
                 BtcUsdUri = Configuration["YobitEndpoints:BtcUsd:Uri"],
                 TrxUsdtUri = Configuration["YobitEndpoints:TrxUsdt:Uri"],
             };
             services.AddYobitApiService(yobitSettings);
-            services.AddHostedService<StatisticsHttpDownloadService>();
+            services.AddHostedService<RecordsUpdateService>();
         }
         public void Configure(IApplicationBuilder app)
         {

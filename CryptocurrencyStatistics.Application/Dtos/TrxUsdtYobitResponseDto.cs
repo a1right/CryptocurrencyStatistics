@@ -2,7 +2,7 @@
 namespace CryptocurrencyStatistics.Application.Dtos
 {
 
-    public class TrxUsdtResponseDto
+    public class TrxUsdtYobitResponseDto
     {
         public Trx_Usdt trx_usdt { get; set; }
     }

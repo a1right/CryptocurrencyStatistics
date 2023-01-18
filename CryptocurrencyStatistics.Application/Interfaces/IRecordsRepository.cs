@@ -5,7 +5,8 @@ using CryptocurrencyStatistics.Domain;
 
 namespace CryptocurrencyStatistics.Application.Interfaces
 {
-    public interface IRecordsService
+    public interface IRecordsRepository
+
     {
         public Task<Record> GetLastRecord(string pairName, CancellationToken cancellationToken = default(CancellationToken));
 

@@ -15,16 +15,16 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
     [Route("/api/[controller]")]
     public class RecordsController : ControllerBase
     {
-        private readonly IRecordsService _recordsService;
+        private readonly IRecordsRepository _recordsRepository;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private string _ethUsdPairName;
         private string _btcUsdPairName;
         private string _trxUsdtPairName;
 
-        public RecordsController(IRecordsService recordsService, IMapper mapper, IConfiguration configuration)
+        public RecordsController(IRecordsRepository recordsRepository, IMapper mapper, IConfiguration configuration)
         {
-            _recordsService = recordsService;
+            _recordsRepository = recordsRepository;
             _mapper = mapper;
             _configuration = configuration;
             _btcUsdPairName = _configuration["YobitEndpoints:BtcUsd:Name"];
@@ -37,7 +37,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         [HttpGet("eth_usd")]
         public async Task<ActionResult<RecordReadDto>> GetLastEthUsdRecord(CancellationToken cancellationToken)
         {
-            var record = await _recordsService.GetLastRecord(_ethUsdPairName, cancellationToken);
+            var record = await _recordsRepository.GetLastRecord(_ethUsdPairName, cancellationToken);
             if (record is null)
                 return NotFound();
             var response = _mapper.Map<RecordReadDto>(record);
@@ -47,7 +47,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         public async Task<ActionResult<RecordReadDto>> GetLastEthUsdRecord(int dateRequest ,CancellationToken cancellationToken)
         {
             var date = dateRequest.ToUniversalDateTime();
-            var record = await _recordsService.GetRecordAtDate(_ethUsdPairName, date, cancellationToken);
+            var record = await _recordsRepository.GetRecordAtDate(_ethUsdPairName, date, cancellationToken);
             if (record is null)
                 return NotFound();
             var response = _mapper.Map<RecordReadDto>(record);
@@ -60,8 +60,8 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
             var record = _mapper.Map<Record>(createDto);
             record.CreatedDateTime = createDto.CreatedDateTime.ToUniversalDateTime();
             record.PairName = _ethUsdPairName;
-            await _recordsService.CreateRecord(record, cancellationToken);
-            return Ok(record.Id);
+            await _recordsRepository.CreateRecord(record, cancellationToken);
+            return Ok();
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         [HttpGet("btc_usd")]
         public async Task<ActionResult<RecordReadDto>> GetLastBtcUsdRecord(CancellationToken cancellationToken)
         {
-            var record = await _recordsService.GetLastRecord(_btcUsdPairName, cancellationToken);
+            var record = await _recordsRepository.GetLastRecord(_btcUsdPairName, cancellationToken);
             if (record is null)
                 return NotFound();
             var response = _mapper.Map<RecordReadDto>(record);
@@ -81,7 +81,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         public async Task<ActionResult<RecordReadDto>> GetLastBtcUsdRecord(int dateRequest, CancellationToken cancellationToken)
         {
             var date = dateRequest.ToUniversalDateTime();
-            var record = await _recordsService.GetRecordAtDate(_btcUsdPairName, date, cancellationToken);
+            var record = await _recordsRepository.GetRecordAtDate(_btcUsdPairName, date, cancellationToken);
             if (record is null)
                 return NotFound();
             var response = _mapper.Map<RecordReadDto>(record);
@@ -94,8 +94,8 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
             var record = _mapper.Map<Record>(createDto);
             record.CreatedDateTime = createDto.CreatedDateTime.ToUniversalDateTime();
             record.PairName = _btcUsdPairName;
-            await _recordsService.CreateRecord(record, cancellationToken);
-            return Ok(record.Id);
+            await _recordsRepository.CreateRecord(record, cancellationToken);
+            return Ok();
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         [HttpGet("trx_usdt")]
         public async Task<ActionResult<RecordReadDto>> GetLastTrxUsdtRecord(CancellationToken cancellationToken)
         {
-            var record = await _recordsService.GetLastRecord(_trxUsdtPairName, cancellationToken);
+            var record = await _recordsRepository.GetLastRecord(_trxUsdtPairName, cancellationToken);
             if (record is null)
                 return NotFound();
             var response = _mapper.Map<RecordReadDto>(record);
@@ -114,7 +114,7 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
         public async Task<ActionResult<RecordReadDto>> GetLastTrxUsdtRecord(int dateRequest, CancellationToken cancellationToken)
         {
             var date = dateRequest.ToUniversalDateTime();
-            var record = await _recordsService.GetRecordAtDate(_trxUsdtPairName, date, cancellationToken);
+            var record = await _recordsRepository.GetRecordAtDate(_trxUsdtPairName, date, cancellationToken);
             if (record is null)
                 return NotFound();
             var response = _mapper.Map<RecordReadDto>(record);
@@ -127,8 +127,8 @@ namespace CryptocurrencyStatistics.WebApi.Controllers
             var record = _mapper.Map<Record>(createDto);
             record.CreatedDateTime = createDto.CreatedDateTime.ToUniversalDateTime();
             record.PairName = _trxUsdtPairName;
-            await _recordsService.CreateRecord(record, cancellationToken);
-            return Ok(record.Id);
+            await _recordsRepository.CreateRecord(record, cancellationToken);
+            return Ok();
         }
 
 
