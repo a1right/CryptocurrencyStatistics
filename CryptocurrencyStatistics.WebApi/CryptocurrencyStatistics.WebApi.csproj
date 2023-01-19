@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryptocurrencyStatistics.Application\CryptocurrencyStatistics.Application.csproj" />
+    <ProjectReference Include="..\CryptocurrencyStatistics.DocumentOrientedStorage\CryptocurrencyStatistics.DocumentOrientedStorage.csproj" />
     <ProjectReference Include="..\CryptocurrencyStatistics.Domain\CryptocurrencyStatistics.Domain.csproj" />
     <ProjectReference Include="..\CryptocurrencyStatistics.Relational\CryptocurrencyStatistics.RelationalStorage.csproj" />
   </ItemGroup>

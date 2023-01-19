@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using CryptocurrencyStatistics.Application.Interfaces;
 using CryptocurrencyStatistics.RelationalStorage.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -23,9 +21,9 @@ namespace CryptocurrencyStatistics.Relational
             return services;
         }
 
-        public static IServiceCollection AddRecordsRepository(this IServiceCollection services)
+        public static IServiceCollection AddRecordsRelationalRepository(this IServiceCollection services)
         {
-            services.AddScoped<IRecordsRepository, RecordsRepository>();
+            services.AddScoped<IRecordsRelationalRepository, RecordsRelationalRepository>();
             return services;
         }
     }

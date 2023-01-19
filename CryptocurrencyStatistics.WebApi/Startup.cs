@@ -1,15 +1,15 @@
-using System;
 using CryptocurrencyStatistics.Application;
 using CryptocurrencyStatistics.Application.Services;
+using CryptocurrencyStatistics.DocumentOrientedStorage;
+using CryptocurrencyStatistics.Relational;
+using CryptocurrencyStatistics.RelationalStorage;
+using CryptocurrencyStatistics.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CryptocurrencyStatistics.Relational;
-using CryptocurrencyStatistics.RelationalStorage;
-using CryptocurrencyStatistics.WebApi.Services;
+using System;
 using System.Reflection;
-using CryptocurrencyStatistics.Application.Interfaces;
 
 namespace CryptocurrencyStatistics.WebApi
 {
@@ -35,8 +35,9 @@ namespace CryptocurrencyStatistics.WebApi
                 Console.WriteLine("--> Using InMemoryDb");
             }
 
-            services.AddRecordsRepository();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddRecordsRelationalRepository();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddHttpClient();
             var yobitSettings = new YobitApiClientSettings()
             {
@@ -44,6 +45,14 @@ namespace CryptocurrencyStatistics.WebApi
                 BtcUsdUri = Configuration["YobitEndpoints:BtcUsd:Uri"],
                 TrxUsdtUri = Configuration["YobitEndpoints:TrxUsdt:Uri"],
             };
+            var mongoSettings = new RecordsMongoDbSettings()
+            {
+                ConnectionString = Configuration["RecordsDb:ConnectionString"],
+                DatabaseName = Configuration["RecordsDb:DatabaseName"],
+                RecordsCollectionName = Configuration["RecordsDb:RecordsCollectionName"],
+            };
+            services.AddMongoDb(mongoSettings);
+            services.AddRecordsDocumentOrientedRepository();
             services.AddYobitApiService(yobitSettings);
             services.AddHostedService<RecordsUpdateService>();
         }
